@@ -1,0 +1,226 @@
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<style>
+    .contain {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .logo {
+        text-align: center;
+        position: relative;
+        top: 200px;
+    }
+
+    .logo img {
+        width: 272px;
+        height: 92px;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: row;
+        right: 15px;
+        position: absolute;
+        align-items: center;
+    }
+
+    .link {
+        padding-left: 10px;
+    }
+
+    .link a {
+        padding-right: 20px;
+        color: rgba(0, 0, 0, 0.87);
+        ;
+        text-decoration: none;
+    }
+
+    .link a:hover {
+        text-decoration: underline;
+    }
+
+    .contain-icon {
+        margin-right: 20px;
+    }
+
+    .btnSignIn {
+        background-color: #4285f4;
+        border: 1px solid #4285f4;
+        color: #fff;
+        height: 30px;
+        width: 100px;
+        font-weight: 700;
+        border-radius: 2px;
+
+    }
+
+    .btn-guess {
+        background-color: #f2f2f2;
+        width: 100px;
+        height: 35px;
+        border: none;
+        border-radius: 4px;
+        font-size: 15px;
+        color: #6b6969;
+    }
+
+    .btn-guess:hover {
+        border: 1px solid #ccc;
+    }
+
+    .contain-input {
+        position: relative;
+        top: 225px;
+        margin: 0 auto 0 auto;
+        display: flex;
+        flex-direction: row;
+        width: 600px;
+        height: 44px;
+        border-radius: 22px;
+        box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+        align-items: center;
+
+    }
+
+    input {
+        border: none;
+        width: 550px;
+        height: 44px;
+        padding: 0px 10px;
+        font-size: 15px
+    }
+
+    input:focus {
+        outline-width: 0;
+    }
+
+    .search-icon {
+        color: #ccc;
+    }
+
+    .micro-icon {
+        color: blue;
+    }
+
+    .contain-btn {
+        position: relative;
+        top: 255px;
+        margin: 0 auto 0 auto;
+    }
+
+    .contain-result {
+        position: relative;
+        top: 300px;
+        padding-left: 100px;
+    }
+</style>
+
+<div class="contain">
+    <div class="menu">
+        <div class="link">
+            <a href="#">Gmail</a>
+            <a href="#">Images</a>
+        </div>
+        <div class="contain-icon">
+            <a href="#">
+                <i class="fas fa-th"></i>
+            </a>
+        </div>
+        <div>
+            <button class="btnSignIn">Đăng nhập</button>
+        </div>
+    </div>
+    <div class="logo" title="Google">
+        <img src="https://cdn.arstechnica.net/wp-content/uploads/2014/07/logo6w.png" />
+    </div>
+    <div class="contain-input">
+        <div style="padding-left: 10px">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+        <input type="text" id="inputNumber" placeholder="Enter a number" />
+        <div>
+            <i class="fas fa-microphone micro-icon"></i>
+        </div>
+    </div>
+    <div class="contain-btn">
+        <button class="btn-guess" onclick="GuessNumber()">Guess</button>
+    </div>
+    <div class="contain-result">
+        <div id="message"></div>
+        <div>Mảng ngẫu nhiên:</div>
+        <div id="arr"></div>
+        <div>Mảng con liên tiếp lớn nhất:</div>
+        <div id="arrChild"></div>
+        <div>Tổng mảng con liên tiếp lớn nhất:</div>
+        <div id="sum"></div>
+        <div>Kết quả:</div>
+        <div id="result"></div>
+    </div>
+
+</div>
+<script>
+    var count = 10;
+    function GuessNumber() {
+        var arr = [];
+        for (let i = 0; i < 30; i++) {
+            var t = Math.floor(Math.random() * 100 - 50);
+            arr.push(t);
+        }
+        var number = document.getElementById("inputNumber").value;
+        var sum = 0;
+        var arrS = [];
+        var s = 0;
+        arrS.push(0);
+        var posStart = 0;
+        var posEnd = 1;
+        var maxSub = 0;
+        if (count > 0) {
+            //Tìm mảng con liên tiếp có tổng lớn nhất
+
+            for (let i = 0; i < arr.length; i++) {
+                s += arr[i];
+                arrS.push(s);
+            }
+
+            for (let i = 0; i < arrS.length - 1; i++) {
+                for (let j = i + 1; j < arrS.length; j++) {
+                    var temp = arrS[j] - arrS[i];
+                    if (temp > maxSub) {
+                        maxSub = temp;
+                        posStart = i;
+                        posEnd = j;
+                    }
+                }
+            }
+            var str = "";
+            for (let i = posStart; i < posEnd; i++) {
+                str += arr[i] + " ";
+                sum += arr[i];
+            }
+            console.log(maxSub);
+            console.log(arr);
+            console.log(arrS);
+            console.log(str);
+            // console.log(sum);
+            document.getElementById("arr").innerHTML = arr;
+            document.getElementById("arrChild").innerHTML = str;
+            document.getElementById("sum").innerHTML = sum;
+            if (number == sum) {
+                document.getElementById("result").innerHTML = "Success!";
+                document.getElementById("result").style.backgroundColor = "green";
+                location.reload();
+            }
+            else {
+                document.getElementById("result").innerHTML = "Fail!";
+                document.getElementById("result").style.backgroundColor = "red";
+                count = count - 1;
+                document.getElementById("message").innerHTML = "Bạn còn " + count + " lần";
+                if (count == 0) {
+                    alert("Bạn đã thua và bạn đã hết lượt chơi!");
+                    location.reload();
+                }
+            }
+
+        }
+    }
+</script>

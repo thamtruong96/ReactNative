@@ -1,0 +1,24 @@
+<style>
+
+</style>
+
+<p id="message">Enter a number</p>
+<input type="text" id="txtNumber" />
+<button onclick="GuessNumber()" id="btnGuess">Guess</button>
+<script>
+    function GuessNumber() {
+        var count = 10;
+        var currentNumber = Math.floor(Math.random() * 10 + 1);
+        var inputNumber = document.getElementById('txtNumber').value;
+        
+        if (inputNumber == currentNumber) {
+            document.getElementById("message").innerHTML = "Success";
+            document.getElementById("message").style.backgroundColor = "green";
+        }
+        else{
+            document.getElementById("message").innerHTML = "Fail";
+            document.getElementById("message").style.backgroundColor = "red";
+        }
+    }
+
+</script>

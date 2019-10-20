@@ -1,0 +1,55 @@
+<h1>Currency Converter</h1>
+<p>Enter amount:</p>
+<input id="input" />
+<span>VND</span>
+<br />
+<div class="radio-group">
+    <input type="radio" value="USD" name="currency" /> USD <br />
+    <input type="radio" value="USD" name="currency" /> EUR <br />
+    <input type="radio" value="USD" name="currency" /> CNY <br />
+    <input type="radio" value="USD" name="currency" /> KRW <br />
+    <input type="radio" value="USD" name="currency" /> THB <br />
+</div>
+<p id="result"></p>
+<button onclick="ConvertCurrency()" id="btnConvert">Convert</button>
+</div>
+<script>
+    function ConvertCurrency() {
+        var rdos = document.getElementsByName("currency");
+        var input = document.getElementById("input").value;
+        var cur;
+        var flag = false;
+        for (var i = 0; i < rdos.length; i++) {
+            if (rdos[i].checked) {
+                cur = rdos[i].value;
+                flag = true;
+                break;
+            }
+        }
+        if (flag && input)
+            callApi(cur, input);
+        else
+            alert("Bạn phải nhập số tiền và chọn loại tiền tệ!");
+    }
+    function callApi(currency, input) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://apilayer.net/api/live?access_key=a46f9018869d712d218755d26a927be3&currencies=VND&source=' + currency + '&format=1');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                updateResults(JSON.parse(xhr.responseText), currency, input);
+            }
+            else {
+                alert('Request failed.  Returned status of ' + xhr.status);
+            }
+        };
+        xhr.send();
+    }
+
+    function updateResults(response, currency, input) {
+        var result;
+        input = parseInt(input);
+        result = Math.round(input / response.quotes[currency + "VND"] * 100) / 100;
+        console.log(result);
+        document.getElementById("result").innerHTML = result;
+    }
+</script>
